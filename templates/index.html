@@ -1,0 +1,48 @@
+<html>
+  <head>
+      <script type="text/javascript"  charset="utf-8" src="{{ url_for('static', filename='jquery.js') }}"></script>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}"/>
+      <meta charset="utf-8" />
+      <meta content="initial-scale=1, width=device-width" name="viewport" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Video Streaming Demonstration</title>
+    <script type="text/javascript" charset="utf-8">
+      function stream() {
+        $.ajax({
+            type: 'POST',
+            url:"{{ url_for('start') }}",
+            success: function(data) {
+
+              document.getElementById("status").innerHTML = data;
+            },
+            error: function() {
+                alert(error);
+            }
+            })
+        };
+
+        function stop() {
+        $.ajax({
+            type: 'POST',
+            url:"{{ url_for('stop') }}",
+            success: function(data) {
+
+              document.getElementById("status").innerHTML = data;
+            },
+            error: function() {
+                alert(error);
+            }
+            })
+        };
+      </script>
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <img src="{{ url_for('video_feed') }}">
+    <div id='controls'>
+        <button class="btn btn-default" type="submit" onclick="stream()">START</button>
+        <button class="btn btn-default" type="submit" onclick="stop()">STOP</button>
+    </div>
+    <p id='status'></p>
+  </body>
+</html>
