@@ -69,7 +69,9 @@ class Camera(BaseCamera):
                         counter += 1
                         if counter == 5:
                             Camera.score -= 1
-                            asyncio.new_event_loop().run_until_complete(start_player(audio))
+                            loop = asyncio.new_event_loop()
+                            loop.run_until_complete(start_player(audio))
+                            loop.close
                             counter = 0
                             
                     else:

@@ -55,8 +55,6 @@ def video_feed():
     return Response(response=gen(webcam),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-
 if __name__ == '__main__':
-    init_gui(app, port=5000, width=640, height=700,
+    init_gui(app, port=5000, width=640, height=800,
              window_title="PyFladesk",icon="appicon.png", argv=None)
