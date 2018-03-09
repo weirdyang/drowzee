@@ -37,20 +37,22 @@ def stop():
     webcam.camera_reset()
     return "Final Score: {}".format(final)
 
-
-
 def gen(camera):
     """Video streaming generator function."""
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
+@app.route('/restart', methods=['POST'])
+def restart():
+    """restarts camera"""
+    webcam = Camera()
+    return "Camera restarted"
 
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(webcam),
+    return Response(response=gen(webcam),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='materials-icon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='material-indigo-pink.css') }}">
+    <script type="text/javascript"  charset="utf-8" defer src="{{ url_for('static', filename='material-min.js') }}"></script>
+    <meta content="initial-scale=1, width=device-width shrink-to-fit=yes" name="viewport" />
+    <script type="text/javascript"  charset="utf-8" src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>drowzee</title>
+    <script type="text/javascript" charset="utf-8">
+        function stream() {
+          $.ajax({
+              type: 'POST',
+              url:"{{ url_for('start') }}",
+              success: function(data) {
+  
+                document.getElementById("status").innerHTML = data;
+                $('#start_btn').attr("disabled", "disabled");
+                $('#stop_btn').removeAttr("disabled");
+              },
+              error: function() {
+                  alert(error);
+              }
+              })
+          };
+  
+          function stop() {
+          $.ajax({
+              type: 'POST',
+              url:"{{ url_for('stop') }}",
+              success: function(data) {
+  
+                document.getElementById("status").innerHTML = data;
+                $('#stop_btn').attr("disabled", "disabled");
+                $('#start_btn').removeAttr("disabled");
+              },
+              error: function() {
+                  alert(error);
+              }
+              })
+          };
+
+          
+        </script>
+        <script>
+        function restart_cam() {
+          $.ajax({
+              type: 'post',
+              url:"{{ url_for('restart') }}",
+              success: function(data) {
+  
+                document.getElementById("status").innerHTML = data;
+              },
+              error: function(data) {
+                alert(JSON.stringify(data.status))
+              }
+              })
+          };
+        </script>
+</head>
+<body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+                <header class="custom-header mdl-layout__header mdl-layout__header--waterfall">
+                  <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">Video Streaming Demo</span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation mdl-layout--large-screen-only">
+                      <a class="mdl-navigation__link" href="{{url_for('index')}}">Home</a>
+                    </nav>
+                  </div>
+                </header>
+                <div class="mdl-layout__drawer">
+                  <span class="mdl-layout-title">Sidebar Menu</span>
+                  <nav class="mdl-navigation">
+                        <a class="mdl-navigation__link" href="{{url_for('index')}}">Home</a>
+                  </nav>
+                </div>
+    <main class="mdl-layout__content">
+    <div class="container">
+          
+        {%block body %}{%endblock%}
+      
+    </div>
+    </main>    
+
+</body>
