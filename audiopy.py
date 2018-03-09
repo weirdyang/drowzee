@@ -3,6 +3,8 @@ import time
 
 import pygame
 from gtts import gTTS
+import asyncio
+
 
 
 def read_aloud(input_text):
@@ -11,17 +13,20 @@ def read_aloud(input_text):
     tts.save(title)
     start_player(title)
 
-def start_player(file_name):
+async def foo(file_name):
+    if file_name:
+        await start_player(file_name)
+
+async def start_player(file_name):
     pygame.mixer.init()
     try:
         pygame.mixer.music.load(file_name)
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
-            time.sleep(1)
+            await asyncio.sleep(1)
     except pygame.error as message:
         print(message)
     pygame.mixer.quit()
-    os.remove('story.mp3')
 
-sample_text = "Hello, my name is Bob"
-read_aloud(sample_text)
+#sample_text = "wake up"
+#read_aloud(sample_text)

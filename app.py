@@ -17,7 +17,6 @@ else:
 
 app = Flask(__name__)
 webcam = Camera()
-print(webcam.score)
 
 @app.route('/')
 def index():
@@ -34,8 +33,8 @@ def start():
 def stop():
     """start scoring - turn on eye classifier"""
     webcam.set_classifier(0)
-    final = webcam.score
-    webcam.score = 100
+    final = webcam.get_score()
+    webcam.camera_reset()
     return "Final Score: {}".format(final)
 
 
@@ -57,5 +56,5 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    init_gui(app, port=5000, width=640, height=600,
+    init_gui(app, port=5000, width=640, height=700,
              window_title="PyFladesk",icon="appicon.png", argv=None)

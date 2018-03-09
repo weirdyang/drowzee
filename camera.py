@@ -2,6 +2,8 @@ import os
 import cv2
 import sys
 from base_camera import BaseCamera
+from audiopy import start_player
+import asyncio
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -30,8 +32,12 @@ class Camera(BaseCamera):
         Camera.score = 100
 
     @staticmethod
+    def get_score():
+        return Camera.score
+
+    @staticmethod
     def frames():
-        
+        audio = resource_path(os.path.join('static', 'story.mp3'))
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
         eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','haarcascade_eye_tree_eyeglasses.xml')))
         camera = cv2.VideoCapture(Camera.video_source)
@@ -61,16 +67,17 @@ class Camera(BaseCamera):
                         cv2.putText(roi_color, 'Sleeping', (20, 20), font,
                                 1, (255, 255, 255), 2, cv2.LINE_AA)
                         counter += 1
-                        if counter == 2:
+                        if counter == 5:
                             Camera.score -= 1
+                            asyncio.new_event_loop().run_until_complete(start_player(audio))
                             counter = 0
+                            
                     else:
                         cv2.putText(roi_color, 'Awake', (20, 20), font,
-                                1, (255, 255, 255), 2, cv2.LINE_AA)
-                    for (ex, ey, ew, eh) in eyes:
-                        cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
+                            1, (255, 255, 255), 2, cv2.LINE_AA)
+                for (ex, ey, ew, eh) in eyes:
+                    cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
                 cv2.putText(roi_color, '{}'.format(Camera.score), (w//2, h//2), font, 1, (255,0,255), 2, cv2.LINE_AA)
-
             # encode as a jpeg image and return it
             yield cv2.imencode('.jpg', frame)[1].tobytes()
 #pyinstaller -w -F webcamtest.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
