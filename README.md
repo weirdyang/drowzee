@@ -2,7 +2,7 @@
 # drowzee
 Flask app using opencv for drowsiness detection
 
-This is built using [https://github.com/miguelgrinberg/flask-video-streaming/tree/v1](miguelgrinberg's flask video streaming example).
+This is built using [miguelgrinberg\'s flask video streaming example](https://github.com/miguelgrinberg/flask-video-streaming/tree/v1).
 
 Articles:
 
