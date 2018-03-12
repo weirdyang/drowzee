@@ -3,19 +3,19 @@ from importlib import import_module
 import os
 from flask import Flask, render_template, Response
 from pyfladesk import init_gui
-
+from camera import Camera, resource_path
 ##C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64 <<-add to path when building
 
-# import camera driver
-if os.environ.get('CAMERA'):
-    Camera = import_module('camera_' + os.environ['CAMERA']).Camera
+'''tell flask where too look for resources
+if this is bundled in 1 file'''
+if getattr(sys, 'frozen', False):
+    template_folder =resource_path('templates')
+    static_folder = resource_path('static')
+    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
 else:
-    from camera import Camera
+    app = Flask(__name__)
 
-# Raspberry Pi camera module (requires picamera package)
-# from camera_pi import Camera
 
-app = Flask(__name__)
 webcam = Camera()
 
 @app.route('/')
