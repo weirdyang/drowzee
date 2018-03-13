@@ -15,7 +15,7 @@ The app will try to detect faces and eyes. If it detects 5 frames of faces with 
 
 ## Libraries used
 
-Pygame, Flask, OpenCV and pyinstaller
+Pygame, Flask, PyFladesk, OpenCV and pyinstaller
 
 pyinstaller build command:
 
