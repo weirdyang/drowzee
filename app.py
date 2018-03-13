@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from importlib import import_module
 import os
+import sys
 from flask import Flask, render_template, Response
 from pyfladesk import init_gui
 from camera import Camera, resource_path

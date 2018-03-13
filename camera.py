@@ -61,7 +61,8 @@ class Camera(BaseCamera):
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
                 roi_gray = gray[y:y+h, x:x+w]
                 roi_color = frame[y:y+h, x:x+w]
-                eyes = eye_cascade.detectMultiScale(roi_gray, minNeighbors=3, flags=cv2.CASCADE_FIND_BIGGEST_OBJECT)
+                eyes = eye_cascade.detectMultiScale(roi_gray, minNeighbors=3,
+                                                    flags=cv2.CASCADE_FIND_BIGGEST_OBJECT)
                 if Camera.classifier == 1:
                     if(not len(eyes)):
                         cv2.putText(roi_color, 'Sleeping', (20, 20), font,
