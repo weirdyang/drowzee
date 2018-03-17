@@ -84,9 +84,3 @@ class Camera(BaseCamera):
                 cv2.putText(roi_color, '{}'.format(Camera.score), (w//2, h//2), font, 1, (255,0,255), 2, cv2.LINE_AA)
             # encode as a jpeg image and return it
             yield cv2.imencode('.jpg', frame)[1].tobytes()
-#pyinstaller -w -F webcamtest.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
-#pyinstaller -F webcamtest.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'yinstaller -F webcamtest.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
-#pyinstaller -w -F app.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
-#pyinstaller -w webcamtest.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
-#pyinstaller -w --add-data "templates;templates" --add-data "static;static" app.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
-#pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" app.py --hidden-import  ctypes --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'
