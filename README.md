@@ -11,7 +11,7 @@ Articles:
 
 ## Description
 
-The app will try to detect faces and eyes. If it detects 5 frames of faces with no eyes consecutively, it will play a sound and deduct a score.
+The app will try to detect faces and eyes. If it detects 50 frames of faces with no eyes consecutively, it will play a sound and deduct a score.
 
 ## Libraries used
 
