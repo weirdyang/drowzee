@@ -8,10 +8,10 @@ import asyncio
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 ##https://irwinkwan.com/2013/04/29/python-executables-pyinstaller-and-a-48-hour-game-design-compo/
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
+def resource_path(relative):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative)
+    return os.path.join(relative)
 
 class Camera(BaseCamera):
     video_source = 0
@@ -39,7 +39,7 @@ class Camera(BaseCamera):
     def frames():
         audio = resource_path(os.path.join('static', 'story.mp3'))
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
-        eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','haarcascade_eye_tree_eyeglasses.xml')))
+        eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','parojosG.xml')))
         camera = cv2.VideoCapture(Camera.video_source)
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
@@ -48,6 +48,7 @@ class Camera(BaseCamera):
             # Capture frame-by-frame
             
             ret, frame = camera.read()
+            frame = cv2.flip(frame, 1)
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             #https://docs.opencv.org/master/d6/d00/tutori al_py_root.html
             faces = face_cascade.detectMultiScale(gray,
@@ -61,14 +62,14 @@ class Camera(BaseCamera):
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
                 roi_gray = gray[y:y+h, x:x+w]
                 roi_color = frame[y:y+h, x:x+w]
-                eyes = eye_cascade.detectMultiScale(roi_gray, minNeighbors=3,
+                eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=4,
                                                     flags=cv2.CASCADE_FIND_BIGGEST_OBJECT)
                 if Camera.classifier == 1:
                     if(not len(eyes)):
                         cv2.putText(roi_color, 'Sleeping', (20, 20), font,
                                 1, (255, 255, 255), 2, cv2.LINE_AA)
                         counter += 1
-                        if counter == 5:
+                        if counter == 50:
                             Camera.score -= 1
                             loop = asyncio.new_event_loop()
                             loop.run_until_complete(start_player(audio))
