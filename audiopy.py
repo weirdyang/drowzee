@@ -8,16 +8,28 @@ import asyncio
 
 
 def read_aloud(input_text):
+    """[summary]
+    Generates a sound file from input text
+    
+    Arguments:
+        input_text {[string]} -- [text to be read aloud]
+    """
     tts = gTTS(text=input_text, lang='en-au', slow=False)
     title = 'story.mp3'
     tts.save(title)
-    start_player(title)
+
 
 async def foo(file_name):
     if file_name:
         await start_player(file_name)
 
 async def start_player(file_name):
+    """[summary]
+    Plays audio file using pygame mixer
+    
+    Arguments:
+        file_name {[.mp3]} -- [file to be played]
+    """
     pygame.mixer.init()
     try:
         pygame.mixer.music.load(file_name)

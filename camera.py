@@ -13,11 +13,36 @@ def resource_path(relative):
         return os.path.join(sys._MEIPASS, relative)
     return os.path.join(relative)
 
+def checking_video_source():
+    for x in range(0, 2):
+        camera = cv2.VideoCapture(x)
+        if camera.isOpened():
+            print('Video source is {}'.format(x))
+            break
+    return camera
+
+
+
 class Camera(BaseCamera):
     video_source = 0
     score = 100
     classifier = 0
+    time_start = None
+    time_end = None
 
+    @staticmethod
+    def set_time_start(timestamp):
+        Camera.time_start = timestamp
+    
+    @staticmethod
+    def set_time_end(timestamp):
+        Camera.time_end = timestamp
+    
+    @staticmethod
+    def get_duration():
+        duration = Camera.time_end - Camera.time_start
+        total_hour = (duration.total_seconds())/ 60 / 60
+        return round(total_hour, 3)
 
     @staticmethod
     def set_video_source(source):
@@ -37,19 +62,25 @@ class Camera(BaseCamera):
 
     @staticmethod
     def frames():
-        audio = resource_path(os.path.join('static', 'story.mp3'))
+        '''Captures stream frame by frame and passes it
+        to the classifier
+        '''
+        wakeup = resource_path(os.path.join('static', 'wakeup.mp3'))
+        takeabreak = resource_path(os.path.join('static', 'takeabreak.mp3'))
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
         eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','parojosG.xml')))
-        camera = cv2.VideoCapture(Camera.video_source)
+        camera = checking_video_source()
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
         counter = 0
+        alarm = 0
         while True:
             # Capture frame-by-frame
             
             ret, frame = camera.read()
             frame = cv2.flip(frame, 1)
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            height, width, channels = frame.shape 
             #https://docs.opencv.org/master/d6/d00/tutori al_py_root.html
             faces = face_cascade.detectMultiScale(gray,
                                       scaleFactor=1.1,
@@ -66,21 +97,30 @@ class Camera(BaseCamera):
                                                     flags=cv2.CASCADE_FIND_BIGGEST_OBJECT)
                 if Camera.classifier == 1:
                     if(not len(eyes)):
-                        cv2.putText(roi_color, 'Sleeping', (20, 20), font,
+                        cv2.putText(frame, 'Sleeping', (25, 25), font,
                                 1, (255, 255, 255), 2, cv2.LINE_AA)
                         counter += 1
                         if counter == 50:
-                            Camera.score -= 1
-                            loop = asyncio.new_event_loop()
-                            loop.run_until_complete(start_player(audio))
-                            loop.close
+                            Camera.score -= 20
+                            alarm += 1
+                            if alarm >= 3:
+                                loop = asyncio.new_event_loop()
+                                loop.run_until_complete(start_player(takeabreak))
+                            else:
+                                loop = asyncio.new_event_loop()
+                                loop.run_until_complete(start_player(wakeup))
+                                loop.close
                             counter = 0
                             
                     else:
-                        cv2.putText(roi_color, 'Awake', (20, 20), font,
+                        cv2.putText(frame, 'Awake', (25, 25), font,
                             1, (255, 255, 255), 2, cv2.LINE_AA)
                 for (ex, ey, ew, eh) in eyes:
                     cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
-                cv2.putText(roi_color, '{}'.format(Camera.score), (w//2, h//2), font, 1, (255,0,255), 2, cv2.LINE_AA)
+            cv2.putText(frame, '{}'.format(Camera.score), (25, height-25), font, 1, (255,0,255), 2, cv2.LINE_AA)
+            if Camera.score < 80:
+                cv2.rectangle(frame, (0,height), (0+width*int(Camera.score/10), height-25), (255,255,255), -1)
+            else:
+                cv2.rectangle(frame, (0,height), (0+width*int(Camera.score/10), height-25), (124,252,0), -1)
             # encode as a jpeg image and return it
             yield cv2.imencode('.jpg', frame)[1].tobytes()
