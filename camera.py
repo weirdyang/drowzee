@@ -119,8 +119,8 @@ class Camera(BaseCamera):
                     cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
             cv2.putText(frame, '{}'.format(Camera.score), (25, height-25), font, 1, (255,0,255), 2, cv2.LINE_AA)
             if Camera.score < 80:
-                cv2.rectangle(frame, (0,height), (0+width*int(Camera.score/10), height-25), (255,255,255), -1)
+                cv2.rectangle(frame, (0,height), (0+2*Camera.score, height-25), (255,255,255), -1)
             else:
-                cv2.rectangle(frame, (0,height), (0+width*int(Camera.score/10), height-25), (124,252,0), -1)
+                cv2.rectangle(frame, (0,height), (0+2*Camera.score, height-25), (124,252,0), -1)
             # encode as a jpeg image and return it
             yield cv2.imencode('.jpg', frame)[1].tobytes()
