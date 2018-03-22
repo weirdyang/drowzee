@@ -3,11 +3,13 @@ from importlib import import_module
 import os
 import sys
 import datetime
+import asyncio
 from flask import Flask, render_template, Response
 from pyfladesk import init_gui
 from camera import Camera, resource_path
+from audiopy import start_player
 ##C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64 <<-add to path when building
-
+perfect = resource_path(os.path.join('static', 'perfect.mp3'))
 '''tell flask where too look for resources
 if this is bundled in 1 file'''
 if getattr(sys, 'frozen', False):
@@ -46,7 +48,14 @@ def stop():
     webcam.set_time_end(timestamp)
     duration = webcam.get_duration()
     webcam.camera_reset()
-    return "Final Score: {0}\n Duration: {1}".format(final,duration)
+    if final == 100:
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(start_player(perfect))
+        loop.close
+
+    points = duration * 10 * final/10
+    print(points)
+    return "Final Score: {0}\n Duration: {1} \n Total Points: {2}".format(final,duration, points)
 
 
 def gen(camera):

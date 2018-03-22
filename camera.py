@@ -106,6 +106,7 @@ class Camera(BaseCamera):
                             if alarm >= 3:
                                 loop = asyncio.new_event_loop()
                                 loop.run_until_complete(start_player(takeabreak))
+                                loop.close
                             else:
                                 loop = asyncio.new_event_loop()
                                 loop.run_until_complete(start_player(wakeup))
