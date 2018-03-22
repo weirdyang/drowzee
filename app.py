@@ -3,7 +3,8 @@ from importlib import import_module
 import os
 import sys
 import datetime
-import asyncio
+import _thread
+import threading
 from flask import Flask, render_template, Response
 from pyfladesk import init_gui
 from camera import Camera, resource_path
@@ -49,9 +50,12 @@ def stop():
     duration = webcam.get_duration()
     webcam.camera_reset()
     if final == 100:
-        loop = asyncio.new_event_loop()
-        loop.run_until_complete(start_player(perfect))
-        loop.close
+        try:
+            playthread = threading.Thread(target=start_player, args=(perfect,) )
+            playthread.start()
+        except Exception as e:
+            print(e)
+        
 
     points = duration * 10 * final/10
     print(points)

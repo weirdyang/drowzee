@@ -1,10 +1,13 @@
+import threading
 import os
-import cv2
 import sys
-from base_camera import BaseCamera
-from audiopy import start_player
-import asyncio
+import time
 
+import cv2
+
+import _thread
+from audiopy import start_player
+from base_camera import BaseCamera
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 ##https://irwinkwan.com/2013/04/29/python-executables-pyinstaller-and-a-48-hour-game-design-compo/
@@ -67,6 +70,7 @@ class Camera(BaseCamera):
         '''
         wakeup = resource_path(os.path.join('static', 'wakeup.mp3'))
         takeabreak = resource_path(os.path.join('static', 'takeabreak.mp3'))
+        gameover = resource_path(os.path.join('static', 'gameover.mp3'))
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
         eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','parojosG.xml')))
         camera = checking_video_source()
@@ -103,14 +107,21 @@ class Camera(BaseCamera):
                         if counter == 50:
                             Camera.score -= 20
                             alarm += 1
-                            if alarm >= 3:
-                                loop = asyncio.new_event_loop()
-                                loop.run_until_complete(start_player(takeabreak))
-                                loop.close
+                            if alarm == 5:
+                                try:
+                                    _thread.start_new_thread( start_player, (gameover,) )
+                                except Exception as e:
+                                    print(e)
+                            elif alarm >= 3:
+                                try:
+                                    _thread.start_new_thread( start_player, (takeabreak,) )
+                                except Exception as e:
+                                    print(e)
                             else:
-                                loop = asyncio.new_event_loop()
-                                loop.run_until_complete(start_player(wakeup))
-                                loop.close
+                                try:
+                                    _thread.start_new_thread( start_player, (wakeup,))
+                                except Exception as e:
+                                    print(e)
                             counter = 0
                             
                     else:
@@ -120,7 +131,7 @@ class Camera(BaseCamera):
                     cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
             cv2.putText(frame, '{}'.format(Camera.score), (25, height-25), font, 1, (255,0,255), 2, cv2.LINE_AA)
             if Camera.score < 80:
-                cv2.rectangle(frame, (0,height), (0+2*Camera.score, height-25), (255,255,255), -1)
+                cv2.rectangle(frame, (0,height), (0+2*Camera.score, height-25), (0,255,255), -1)   
             else:
                 cv2.rectangle(frame, (0,height), (0+2*Camera.score, height-25), (124,252,0), -1)
             # encode as a jpeg image and return it

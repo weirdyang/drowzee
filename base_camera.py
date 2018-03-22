@@ -1,5 +1,6 @@
-import time
 import threading
+import time
+
 try:
     from greenlet import getcurrent as get_ident
 except ImportError:
