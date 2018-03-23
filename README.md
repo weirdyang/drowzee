@@ -20,6 +20,10 @@ Pygame, Flask, PyFladesk, OpenCV and pyinstaller
 pyinstaller build command:
 
     pyinstaller -w --add-data "templates;templates" --add-data "static;static" app.py --path 'C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64'   
+    
+or if you downloaded the app.spec:
+
+    pyinstaller app.spec
       
 ## References: 
 
