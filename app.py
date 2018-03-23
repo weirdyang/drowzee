@@ -11,6 +11,7 @@ from camera import Camera, resource_path
 from audiopy import start_player
 ##C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x64 <<-add to path when building
 perfect = resource_path(os.path.join('static', 'perfect.mp3'))
+icon = resource_path(os.path.join('static', 'appicon.png'))
 '''tell flask where too look for resources
 if this is bundled in 1 file'''
 if getattr(sys, 'frozen', False):
@@ -86,4 +87,4 @@ def video_feed():
 
 if __name__ == '__main__':
     init_gui(app, port=5000, width=640, height=800,
-             window_title="PyFladesk", icon="appicon.png", argv=None)
+             window_title="WAKEY", icon=icon, argv=None)

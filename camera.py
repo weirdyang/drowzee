@@ -109,17 +109,20 @@ class Camera(BaseCamera):
                             alarm += 1
                             if alarm == 5:
                                 try:
-                                    _thread.start_new_thread( start_player, (gameover,) )
+                                    playthread = threading.Thread(target=start_player, args=(gameover,) )
+                                    playthread.start()
                                 except Exception as e:
                                     print(e)
                             elif alarm >= 3:
                                 try:
-                                    _thread.start_new_thread( start_player, (takeabreak,) )
+                                    playthread = threading.Thread(target=start_player, args=(takeabreak,) )
+                                    playthread.start()
                                 except Exception as e:
                                     print(e)
                             else:
                                 try:
-                                    _thread.start_new_thread( start_player, (wakeup,))
+                                    playthread = threading.Thread(target=start_player, args=(wakeup,) )
+                                    playthread.start()
                                 except Exception as e:
                                     print(e)
                             counter = 0
