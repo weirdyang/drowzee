@@ -17,7 +17,7 @@ def resource_path(relative):
     return os.path.join(relative)
 
 def checking_video_source():
-    for x in range(0, 2):
+    for x in range(2, -1, -1):
         camera = cv2.VideoCapture(x)
         if camera.isOpened():
             print('Video source is {}'.format(x))
@@ -74,6 +74,7 @@ class Camera(BaseCamera):
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
         eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','parojosG.xml')))
         camera = checking_video_source()
+        print(Camera.video_source)
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
         counter = 0

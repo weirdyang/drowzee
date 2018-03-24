@@ -23,8 +23,8 @@
                 $('#start_btn').attr("disabled", "disabled");
                 $('#stop_btn').removeAttr("disabled");
               },
-              error: function() {
-                  alert(error);
+              error: function(error) {
+                  console.log(error);
               }
               })
           };
@@ -40,7 +40,7 @@
                 $('#start_btn').removeAttr("disabled");
               },
               error: function() {
-                  alert(error);
+                  console.log(error);
               }
               })
           };
