@@ -72,7 +72,7 @@ class Camera(BaseCamera):
         takeabreak = resource_path(os.path.join('static', 'takeabreak.mp3'))
         gameover = resource_path(os.path.join('static', 'gameover.mp3'))
         face_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static', 'haarcascade_frontalface_alt.xml')))
-        eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','parojosG.xml')))
+        eye_cascade = cv2.CascadeClassifier(resource_path(os.path.join('static','haarcascade_eye.xml')))
         camera = checking_video_source()
         print(Camera.video_source)
         if not camera.isOpened():
