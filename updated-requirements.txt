@@ -43,7 +43,7 @@ prometheus-client==0.7.1
 prompt-toolkit==3.0.5
 PyFladesk==1.1
 pygame==1.9.6
-Pygments==2.6.1
+Pygments==2.7.4
 pylint==2.4.4
 PyQt5==5.14.1
 PyQt5-sip==12.7.1
