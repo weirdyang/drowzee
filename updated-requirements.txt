@@ -1,4 +1,4 @@
-﻿astroid==2.3.3
+astroid==2.3.3
 attrs==19.3.0
 backcall==0.1.0
 beautifulsoup4==4.8.2
@@ -63,7 +63,7 @@ terminado==0.8.3
 testpath==0.4.4
 tornado==6.0.4
 traitlets==4.3.3
-urllib3==1.26.5
+urllib3==2.6.3
 wcwidth==0.1.9
 webencodings==0.5.1
 Werkzeug==1.0.1
