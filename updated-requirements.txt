@@ -1,4 +1,4 @@
-﻿astroid==2.3.3
+astroid==2.3.3
 attrs==19.3.0
 backcall==0.1.0
 beautifulsoup4==4.8.2
@@ -31,7 +31,7 @@ lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mistune==0.8.4
-nbconvert==6.5.1
+nbconvert==7.17.0
 nbformat==5.0.4
 notebook==6.4.10
 numpy==1.21.0
